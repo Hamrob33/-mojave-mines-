@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mojave Abandoned Mine Explorer</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #map { height: 100vh; }
+    body { margin: 0; font-family: sans-serif; }
+    .legend {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(255,255,255,0.9);
+      padding: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div class="legend">
+    Mojave Abandoned Mine Explorer<br>
+    Data from Mindat.org, USGS, NPS<br>
+    Images © Wikimedia Commons or Public Domain<br>
+    Non-commercial use only.
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([35.0, -115.5], 9);
+    L.control.zoom({ position: 'bottomleft' }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const mines = [
+      {
+        name: "Copper World Mine",
+        lat: 35.5133,
+        lng: -115.5598,
+        type: "Cu–Pb–Ag–Au",
+        year: null,
+        description: "Former vein deposit on Clark Mountain; large open cuts and tunnels.",
+        source: "https://www.mindat.org/loc-88358.html",
+        image: "img/placeholder.jpg"
+      },
+      {
+        name: "Hidden Hills Mine",
+        lat: 35.2000,
+        lng: -115.6000,
+        type: "Au–Ag–Cu",
+        year: 1882,
+        description: "Multiple adits and drifts near Hidden Hill.",
+        source: "https://www.mindat.org/loc-88713.html",
+        image: "img/hiddenhill.jpg"
+      },
+      {
+        name: "Lucky Mine",
+        lat: 34.8500,
+        lng: -115.8333,
+        type: "Au–Cu–Pb",
+        year: null,
+        description: "Exploration tunnel; Old Dad District.",
+        source: "https://www.mindat.org/loc-88960.html",
+        image: "img/placeholder.jpg"
+      },
+      {
+        name: "Oro Fino Mine",
+        lat: 34.8500,
+        lng: -115.8500,
+        type: "Gold",
+        year: null,
+        description: "Historic Seventeenmile Point region.",
+        source: "https://www.mindat.org/loc-89181.html",
+        image: "img/placeholder.jpg"
+      },
+      {
+        name: "Bagdad-Chase Mine",
+        lat: 34.7698,
+        lng: -116.1662,
+        type: "Gold",
+        year: null,
+        description: "Largest historical producer in the region.",
+        source: "https://en.wikipedia.org/wiki/Bagdad-Chase_Mine",
+        image: "img/placeholder.jpg"
+      }
+    ];
+
+    mines.forEach(mine => {
+      const popup = `<b>${mine.name}</b><br>
+        <i>Minerals:</i> ${mine.type}<br>
+        ${mine.year ? `<i>Year:</i> ${mine.year}<br>` : ''}
+        <i>Description:</i> ${mine.description}<br>
+        <img src='${mine.image}' alt='mine image' width='200'><br>
+        <a href="${mine.source}" target="_blank">View Source</a>`;
+      L.marker([mine.lat, mine.lng])
+        .addTo(map)
+        .bindPopup(popup);
+    });
+  </script>
+</body>
+</html>
